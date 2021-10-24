@@ -1,1 +1,1 @@
-"ProjectsDetails" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+"yourTableName" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
