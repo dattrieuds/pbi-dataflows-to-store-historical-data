@@ -4,7 +4,7 @@ let
       // This step is nested to be reused later on.                                             
       Selectedfolder = 
         let
-          Source = AzureStorage.DataLake(prADLSFolderPath & prTableToTransform & ".csv.snapshots/"), 
+          Source = AzureStorage.DataLake(prADLSFolderPath & prEntityNameHistorical & ".csv.snapshots/"), 
           #"Removed Other Columns" = Table.SelectColumns(Source, {"Date modified", "Content"})
         in
           #"Removed Other Columns", 
@@ -52,7 +52,7 @@ let
   #"Invoke Transform File Function" = Table.AddColumn(
     Source, 
     "fnRenameColumns", 
-    each fnRenameColumns([Content], prADLSFolderPath, prTableToTransform)
+    each fnRenameColumns([Content], prADLSFolderPath, prEntityNameHistorical)
   ), 
   #"Choose necessary columns" = Table.SelectColumns(
     #"Invoke Transform File Function", 
@@ -65,12 +65,12 @@ let
     Table.ColumnNames(List.Last(#"Choose necessary columns"[fnRenameColumns]))
   ), 
   // This steps contains several nested steps. Final result gives a list of list (list of ColumnName and ColumnType).                                                                                                                     
-    // We don't nest this step in the fnRenameColumns function since after appending many tables together, the column types become Any. So it's good to do this step after "appending table" step.  
+  // We don't nest this step in the fnRenameColumns function since after appending many tables together, the column types become Any. So it's good to do this step after "appending table" step.                                                                                                                                                                                         
   #"Change column types dynamically" = Table.TransformColumnTypes(
     #"Expand appended table", 
     Table.ToRows(
       Table.SelectColumns(
-        Table.SelectRows(stColumnsAttributes, each [Source] = prTableToTransform), 
+        Table.SelectRows(stColumnsAttributes, each [Source] = prEntityNameHistorical), 
         {"ColumnName", "ColumnType"}
       )
     )
