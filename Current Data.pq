@@ -1,7 +1,7 @@
 let
     Source = PowerBI.Dataflows(null),
-    NavToWorkspace = Source{[workspaceId="yourWorkspaceId"]}[Data],
-    NavtoDataflow = NavToWorkspace{[dataflowId="yourDataflowId"]}[Data],
-    NavToTable = NavtoDataflow{[entity="yourTableName"]}[Data]
+    NavToWorkspace = Source{[workspaceId= prWorkspaceId]}[Data],
+    NavtoDataflow = NavToWorkspace{[dataflowId= prDataflowId]}[Data],
+    NavToEntity = NavtoDataflow{[entity= prEntityNameCurrent]}[Data]
 in
-    NavToTable
+    NavToEntity
